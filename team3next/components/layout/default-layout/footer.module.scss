@@ -1,0 +1,38 @@
+.footer{
+    background: var(--efd-6-c-5, #EFD6C5);
+    position: relative;
+    display: flex;
+    height: 130px;
+    padding: 20px 3px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-top: 130px;
+}
+.footerText{
+    display: flex;
+    flex-direction: column; 
+    justify-content:center;
+    align-items:center;
+    width: 204px;
+    height: 30px;
+    color:#3F4C5C;
+}
+.cheese{
+    background-image: url("/images/cheese-logo.png");
+    right: 50px;
+    bottom: 50px;
+    width: 200px;
+    height: 200px;
+    position: absolute;
+background-size:contain ;
+background-repeat: no-repeat;
+background-position: center;
+// position: relative;
+}

@@ -1,0 +1,122 @@
+.topBox {
+  border-bottom: 1px solid rgba(102, 102, 102, 0.5);
+  height: 45px;
+  margin-top: 33px;
+}
+.topBox a {
+  font-weight: 200;
+  font-size: 20px;
+}
+.topBox a:hover {
+  background-color: #ebd8a9;
+}
+.topBox a:active {
+  background-color: #ebd8a9;
+  color: #3f4c5c;
+}
+.topBox button {
+  font-size: 20px;
+  font-weight: 400;
+  background-color: #fff;
+  margin-bottom: 5px;
+  border-radius: 0%;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  border-color: transparent !important;
+}
+
+.topBox button:hover {
+  border-bottom: 3px solid #b6705e !important;
+}
+
+/* main------------ */
+
+.productMain {
+  display: flex;
+  padding: 100px 10px 10px 10px;
+
+  justify-content: space-between;
+}
+
+.btnBox * {
+  margin-bottom: 10px;
+}
+.btnBox select {
+  color: #3f4c5c;
+  line-height: 18px;
+  font-size: 18px;
+  font-weight: bold;
+  border: 1px #808080 solid;
+  border-radius: 40px;
+  width: 100%;
+  height: 33px;
+  text-align: center;
+  padding-left: 35px;
+}
+
+/* infoBox------------- */
+.infoBox {
+  display: flex;
+  padding: 0px 10px;
+  flex-direction: column;
+  align-items: center;
+}
+.infoItem {
+  display: flex;
+  width: 80%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 60px;
+}
+.infoItem .head {
+  width: 200px;
+  padding: 10px 0px;
+  text-align: center;
+  border-bottom: 3px #808080 solid;
+}
+.infoItem .text {
+  text-align: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 16px;
+}
+.infoItem .commentBox {
+  display: flex;
+  width: 80%;
+  padding: 10px 30px 10px 30px;
+  border-bottom: 1px #808080 solid;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.commentBox .pic {
+  width: 65px;
+  height: 65px;
+  margin-right: 10px;
+  border-radius: 50%;
+  background-color: aquamarine;
+  overflow: hidden;
+}
+.comment p {
+  margin: 0px;
+  font-weight: 600;
+}
+.recommendBox {
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  gap: 30px;
+  padding: 0px 10px;
+  margin-bottom: 30px;
+  flex-direction: column;
+  align-items: center;
+}
+.recommendBox .head {
+  width: 200px;
+  padding: 10px 0px;
+  text-align: center;
+  border-bottom: 3px #808080 solid;
+}

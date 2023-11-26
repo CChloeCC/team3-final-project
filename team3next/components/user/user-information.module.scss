@@ -1,0 +1,128 @@
+.bgc{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0px 0px 10px 10px;
+    border-right: 1px solid rgba(0, 0, 0, 0.20);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.20);
+    border-left: 1px solid rgba(0, 0, 0, 0.20);
+    background: linear-gradient(106deg, rgba(255, 255, 255, 0.00) 6.21%, rgba(249, 231, 166, 0.50) 45%);
+    margin-bottom: 50px;
+    box-shadow: 8px 10px 20px 0px rgba(142, 142, 142, 0.25);
+}
+
+.inputarea{
+    border-radius: 0px 0px 10px 10px;
+    border-right: 1px solid rgba(0, 0, 0, 0.20);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.20);
+    border-left: 1px solid rgba(0, 0, 0, 0.20);
+    background: #FFF;
+    /* 陰影 */
+    box-shadow: 8px 10px 20px 0px rgba(142, 142, 142, 0.25);
+    display: flex;
+    width: 720px;
+    padding: 20px 10px 10px 10px;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    gap: 18px 15px;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    margin-bottom: 50px;
+}
+
+.wbc{
+    color: #808080;
+    text-align: center;       
+    display: flex;
+    padding: 30px 10px 25px 20px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 10px;
+    border-radius: 0px 0px 10px 10px;
+    border-right: 1px solid rgba(0, 0, 0, 0.20);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.20);
+    border-left: 1px solid rgba(0, 0, 0, 0.20);
+    background: #FFF;
+
+    /* 陰影 */
+    box-shadow: 8px 10px 20px 0px rgba(142, 142, 142, 0.25);
+}
+
+.wma{
+    font-size: 22px;
+    display: flex;
+    padding: 20px 100px 0px 55px;
+    align-items: center;
+    gap: 10px;
+    align-self: stretch;
+    color: #808080;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.imgArea{
+    display: flex;
+    padding: 30px;
+    padding-left: 60px;
+    justify-content: start;
+    align-items: center;
+    align-content: center;
+    gap: 30px 50px;
+    align-self: stretch;
+    flex-wrap: wrap; 
+}
+
+.imgStyle{
+    width: 348px;
+    height: 360px;
+    border-radius: 10px;
+    /* 陰影 */
+    box-shadow: 8px 10px 20px 0px rgba(142, 142, 142, 0.25); 
+    transform: scale(1,1);
+    transition: all 1s ease-out
+}
+
+    
+.imgStyle:hover{
+    transform: scale(1.04,1.04)}
+
+// 追蹤作者外框設定
+.afs{
+    display: flex;
+    height: 800px;
+    padding: 0px 10px 20px 100px;
+    align-items: flex-start;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    border-radius: 0px 0px 10px 10px;
+    border-right: 1px solid rgba(0, 0, 0, 0.20);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.20);
+    border-left: 1px solid rgba(0, 0, 0, 0.20);
+    background: #FFF;
+
+    /* 陰影 */
+    box-shadow: 8px 10px 20px 0px rgba(142, 142, 142, 0.25);
+}
+
+.authorCard{
+    display: flex;
+    width: 300px;
+    height: 100px;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+    border-radius: 25px;
+    border: 1px solid rgba(0, 0, 0, 0.50);
+}
+
+.authorText{
+    display: flex;
+    padding: 50px 10px 20px 1px;
+    color: #808080;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: normal;  
+}
