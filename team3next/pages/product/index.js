@@ -526,12 +526,12 @@ export default function index() {
                 })}
               </div>
             </div>
-
+            {/* ------------搜尋列------------ */}
             <div className="container">
               <div
                 className={
                   styles.sort +
-                  " row d-flex justify-content-end align-items-center"
+                  " row d-flex justify-content-end align-items-center mb-2"
                 }
               >
                 <form className="col-auto d-flex " role="search">

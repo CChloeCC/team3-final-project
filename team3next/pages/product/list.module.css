@@ -143,7 +143,7 @@
 @media screen and (max-width: 992px) {
   .topBox {
     flex-wrap: wrap;
-    /* overflow: hidden; */
+    overflow: hidden;
     width: 40%;
     height: 60px;
     border-bottom: 1px solid #808080;
