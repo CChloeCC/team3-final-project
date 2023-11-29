@@ -1,3 +1,7 @@
+.container {
+  margin: 0 auto;
+}
+
 .bread {
   display: flex;
   align-items: center;
@@ -84,6 +88,15 @@
   display: flex;
   flex-direction: column;
 }
+.leftBox > span {
+  display: none;
+  border-radius: 50px;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  font-size: 18px;
+}
 .left {
   width: 180px;
 
@@ -97,7 +110,6 @@
 
 .left button,
 .leftA {
-  background-color: #fff;
   margin-bottom: 2px;
   border-radius: 0%;
   display: flex;
@@ -208,7 +220,27 @@
 
 @media screen and (max-width: 787px) {
   .leftBox {
-    display: none;
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    transition: all 0.2s ease-in;
+    position: absolute;
+    z-index: 3;
+    top: 4px;
+    border-radius: 10px;
+  }
+  .leftBox span {
+    /* height: 40px; */
+    display: inline-block;
+  }
+  .leftBox span:hover {
+    color: #b6705e !important;
+  }
+
+  .leftBox:hover {
+    width: 230px;
+    height: auto;
+    background-color: #fbf9ef;
   }
   .barBtn {
     display: inline;

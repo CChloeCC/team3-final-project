@@ -1,35 +1,54 @@
+/* menu */
 .topBox {
-  border-bottom: 1px solid rgba(102, 102, 102, 0.5);
+  border-bottom: 2px solid rgba(102, 102, 102, 0.5);
+  margin: 33px 0 0 0;
+  z-index: 3;
+}
+.topBoxItem {
   height: 45px;
-  margin-top: 33px;
+  background-color: #b6705e;
+  background-color: transparent;
 }
-.topBox a {
-  font-weight: 200;
-  font-size: 20px;
-}
-.topBox a:hover {
-  background-color: #ebd8a9;
-}
-.topBox a:active {
-  background-color: #ebd8a9;
-  color: #3f4c5c;
-}
-.topBox button {
-  font-size: 20px;
-  font-weight: 400;
-  background-color: #fff;
-  margin-bottom: 5px;
+
+.topBoxItem > button,
+.topBoxAll {
+  box-sizing: border-box;
+  font-size: 18px;
+  font-weight: 600;
+
   border-radius: 0%;
   display: flex;
   align-items: center;
-  justify-content: left;
-  border-color: transparent !important;
+  justify-content: center;
+  border: 3px solid transparent !important;
 }
 
-.topBox button:hover {
+.topBoxItem > button:hover,
+.topBoxAll:hover {
   border-bottom: 3px solid #b6705e !important;
 }
-
+.collapseBox {
+  padding: 10px 0;
+  margin-top: 10px;
+  width: 155px;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.collapseBox button {
+  font-size: 14px;
+  color: #3f4c5c;
+  padding: 3px 5px;
+  border-radius: 40px;
+}
+.collapseBox button:hover {
+  background-color: #ebd8a9;
+}
+.collapseBox abutton:active {
+  background-color: #ebd8a9;
+  color: #3f4c5c;
+}
 /* main------------ */
 
 .productMain {
@@ -119,4 +138,38 @@
   padding: 10px 0px;
   text-align: center;
   border-bottom: 3px #808080 solid;
+}
+
+@media screen and (max-width: 992px) {
+  .topBox {
+    flex-wrap: wrap;
+    /* overflow: hidden; */
+    width: 40%;
+    height: 60px;
+    border-bottom: 1px solid #808080;
+    position: absolute;
+    left: 30%;
+  }
+  .main {
+    margin: 120px 0 0 0;
+  }
+  .topBox:hover {
+    background-color: #fbf9ef;
+    border-radius: 10px;
+    height: auto;
+    transition: all 0.1s ease-in;
+  }
+  .topBoxItem {
+    width: 100%;
+    height: auto;
+    box-sizing: content-box;
+    margin: 10px 0;
+  }
+  .topBoxItem > button {
+    height: 40px;
+  }
+
+  .productMain {
+    padding: 10px;
+  }
 }

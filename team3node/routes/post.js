@@ -1,7 +1,7 @@
 import express from "express";
 import db from "../module/connect.js";
 import upload from "../module/upload-imgs.js";
-import multer from 'multer'
+import multer from "multer";
 
 const postRouter = express.Router();
 // const uploadImg = multer()
@@ -37,14 +37,11 @@ postRouter.post("/post-comment", async (req, res) => {
   res.json(rowsComments);
 });
 
-const uploadImg=multer({dest:'tmp_uploads/',  fieldname: 'photo'});//設定上傳檔案位置
+const uploadImg = multer({ dest: "tmp_uploads/", fieldname: "photo" }); //設定上傳檔案位置
 //新增文章路由
-postRouter.post(
-  "/add-post",
-  upload.any(),
-  async (req, res) => {
-    //return res.json([req.files,req.body])
-    /*
+postRouter.post("/add-post", upload.any(), async (req, res) => {
+  //return res.json([req.files,req.body])
+  /*
     [
     [
         {
@@ -80,42 +77,42 @@ postRouter.post(
     }
 ]
     */
-    // console.log(req.body);
-    let { post_title, post_content, post_restaurant_id, user_id, food_tag_id } =
-      req.body;
-    console.log(food_tag_id);
-    const output = {
-      success: false,
-      errors: {},
-      result: {},
-      postData: {}, // 除錯檢查用
-    };
-    const sqlPost = `INSERT INTO post ( post_title, post_content, post_restaurant_id, createTime, user_id, editingTime, postisValid) VALUES (?, ?, ?, NOW(),  ?,  NOW(), 1)`;
+  // console.log(req.body);
+  let { post_title, post_content, post_restaurant_id, user_id, food_tag_id } =
+    req.body;
+  // console.log(food_tag_id);
+  const output = {
+    success: false,
+    errors: {},
+    result: {},
+    postData: {}, // 除錯檢查用
+  };
+  const sqlPost = `INSERT INTO post ( post_title, post_content, post_restaurant_id, createTime, user_id, editingTime, postisValid) VALUES (?, ?, ?, NOW(),  ?,  NOW(), 1)`;
 
-    let result;
+  let result;
 
-    try {
-      [result] = await db.query(sqlPost, [
-        post_title,
-        post_content,
-        post_restaurant_id,
-        user_id,
+  try {
+    [result] = await db.query(sqlPost, [
+      post_title,
+      post_content,
+      post_restaurant_id,
+      user_id,
+    ]);
+    output.success = !!result.affectedRows;
+    output.result = result;
+
+    const postId = result.insertId;
+
+    const foodTagInsertPromises = [];
+
+    for (let i = 0; i < food_tag_id.length; i++) {
+      const sqlTags = `INSERT INTO post_food_tag (post_food_tag_id, post_id, food_tag_id) VALUES (NULL, ?, ?)`;
+      const foodTagInsertPromise = await db.query(sqlTags, [
+        postId,
+        food_tag_id[i],
       ]);
-      output.success = !!result.affectedRows;
-      output.result = result;
-
-      const postId = result.insertId;
-
-      const foodTagInsertPromises = [];
-
-      for (let i = 0; i < food_tag_id.length; i++) {
-        const sqlTags = `INSERT INTO post_food_tag (post_food_tag_id, post_id, food_tag_id) VALUES (NULL, ?, ?)`;
-        const foodTagInsertPromise = await db.query(sqlTags, [
-          postId,
-          food_tag_id[i],
-        ]);
-        foodTagInsertPromises.push(foodTagInsertPromise);
-      }/*
+      foodTagInsertPromises.push(foodTagInsertPromise);
+    } /*
       try {
         await Promise.all(foodTagInsertPromises);
       } catch (err) {
@@ -123,116 +120,110 @@ postRouter.post(
       }
       */
 
-      if (req.files && req.files.length > 0) {
-        const sqlImg = `INSERT INTO post_image (post_id, post_image_name) VALUES (?, ?)`;
+    if (req.files && req.files.length > 0) {
+      const sqlImg = `INSERT INTO post_image (post_id, post_image_name) VALUES (?, ?)`;
 
-        for(let f of req.files){
-          try {
-            [result] = await db.query(sqlImg, [postId, f.filename]);
-            console.log(`File ${f.filename} inserted into database.`);
-          } catch (err) {
-            console.error(
-              `Error inserting file ${f.filename} into database: ${err}`
-            );
-          }
+      for (let f of req.files) {
+        try {
+          [result] = await db.query(sqlImg, [postId, f.filename]);
+          console.log(`File ${f.filename} inserted into database.`);
+        } catch (err) {
+          console.error(
+            `Error inserting file ${f.filename} into database: ${err}`
+          );
         }
       }
-    } catch (err) {
-      console.log({err})
-      output.errors = "SQL 錯誤";
-      output.err = err;
     }
-    output.reqfiles = req.files;
-    res.json(output);
+  } catch (err) {
+    console.log({ err });
+    output.errors = "SQL 錯誤";
+    output.err = err;
   }
-);
+  output.reqfiles = req.files;
+  res.json(output);
+});
 
 //修改文章路由
-postRouter.get(
-  "/edit-post/:uid/:pid",async(req, res)=>{
+postRouter.get("/edit-post/:uid/:pid", async (req, res) => {
   const user_id = parseInt(req.params.user_id) || 0;
   const post_id = req.params.post_id;
-  console.log(pid);
+  // console.log(pid);
 
   let output = {
     rows: [],
   };
 
-  const sql = `select * from post join post_restaurant on post.post_restaurant_id = post_restaurant.post_restaurant_id join post_image on post.post_id = post_image.post_id join post_food_tag on post.post_id = post_food_tag.post_id JOIN food_tag on post_food_tag.food_tag_id = food_tag.food_tag_id where post.post_id=${post_id} And post.user_id=${user_id};`
+  const sql = `select * from post join post_restaurant on post.post_restaurant_id = post_restaurant.post_restaurant_id join post_image on post.post_id = post_image.post_id join post_food_tag on post.post_id = post_food_tag.post_id JOIN food_tag on post_food_tag.food_tag_id = food_tag.food_tag_id where post.post_id=${post_id} And post.user_id=${user_id};`;
 
   const [[rows]] = await db.query(sql, [user_id]);
   output.rows = rows;
 
   res.json(output);
-  });
+});
 
-  postRouter.post(
-    "/edit-post",
-  async (req, res) => {
-    if (!res.locals.jwtData?.user_id) {
-      return res.json({});
-    }
-    const loguid = res.locals.jwtData.user_id;
-    // console.log(req.body);
-    let { post_title, post_content,  user_id,  } =
-      req.body;
-    console.log(food_tag_id);
-    const output = {
-      success: false,
-      errors: {},
-      result: {},
-      postData: {}, // 除錯檢查用
-    };
-    const sqlPost = `UPDATE post SET post_content = '該拿這個會縮小的介面怎麼辦啊\r\n我揪竟能轉職成功' WHERE post.post_id = 64 INTO post ( post_title, post_content, post_restaurant_id, createTime, user_id, editingTime, postisValid) VALUES (?, ?, ?, NOW(),  ?,  NOW(), 1)`;
+postRouter.post("/edit-post", async (req, res) => {
+  if (!res.locals.jwtData?.user_id) {
+    return res.json({});
+  }
+  const loguid = res.locals.jwtData.user_id;
+  // console.log(req.body);
+  let { post_title, post_content, user_id } = req.body;
+  // console.log(food_tag_id);
+  const output = {
+    success: false,
+    errors: {},
+    result: {},
+    postData: {}, // 除錯檢查用
+  };
+  const sqlPost = `UPDATE post SET post_content = '該拿這個會縮小的介面怎麼辦啊\r\n我揪竟能轉職成功' WHERE post.post_id = 64 INTO post ( post_title, post_content, post_restaurant_id, createTime, user_id, editingTime, postisValid) VALUES (?, ?, ?, NOW(),  ?,  NOW(), 1)`;
 
-    let result;
+  let result;
 
-    try {
-      [result] = await db.query(sqlPost, [
-        post_title,
-        post_content,
-        post_restaurant_id,
-        user_id,
+  try {
+    [result] = await db.query(sqlPost, [
+      post_title,
+      post_content,
+      post_restaurant_id,
+      user_id,
+    ]);
+    output.success = !!result.affectedRows;
+    output.result = result;
+
+    const postId = result.insertId;
+
+    const foodTagInsertPromises = [];
+
+    for (let i = 0; i < food_tag_id.length; i++) {
+      const sqlTags = `INSERT INTO post_food_tag (post_food_tag_id, post_id, food_tag_id) VALUES (NULL, ?, ?)`;
+      const foodTagInsertPromise = await db.query(sqlTags, [
+        postId,
+        food_tag_id[i],
       ]);
-      output.success = !!result.affectedRows;
-      output.result = result;
+      foodTagInsertPromises.push(foodTagInsertPromise);
+    }
 
-      const postId = result.insertId;
+    if (req.files && req.files.length > 0) {
+      const sqlImg = `INSERT INTO post_image (post_id, post_image_name) VALUES (?, ?)`;
 
-      const foodTagInsertPromises = [];
-
-      for (let i = 0; i < food_tag_id.length; i++) {
-        const sqlTags = `INSERT INTO post_food_tag (post_food_tag_id, post_id, food_tag_id) VALUES (NULL, ?, ?)`;
-        const foodTagInsertPromise = await db.query(sqlTags, [
-          postId,
-          food_tag_id[i],
-        ]);
-        foodTagInsertPromises.push(foodTagInsertPromise);
-      }
-
-      if (req.files && req.files.length > 0) {
-        const sqlImg = `INSERT INTO post_image (post_id, post_image_name) VALUES (?, ?)`;
-
-        for(let f of req.files){
-          try {
-            [result] = await db.query(sqlImg, [postId, f.filename]);
-            console.log(`File ${f.filename} inserted into database.`);
-          } catch (err) {
-            console.error(
-              `Error inserting file ${f.filename} into database: ${err}`
-            );
-          }
+      for (let f of req.files) {
+        try {
+          [result] = await db.query(sqlImg, [postId, f.filename]);
+          console.log(`File ${f.filename} inserted into database.`);
+        } catch (err) {
+          console.error(
+            `Error inserting file ${f.filename} into database: ${err}`
+          );
         }
       }
-    } catch (err) {
-      console.log({err})
-      output.errors = "SQL 錯誤";
-      output.err = err;
     }
-    output.reqfiles = req.files;
-    res.json(output);
+  } catch (err) {
+    console.log({ err });
+    output.errors = "SQL 錯誤";
+    output.err = err;
   }
-);
+  output.reqfiles = req.files;
+  res.json(output);
+});
 
 //新增留言
 postRouter.post("/add-comment", async (req, res) => {
@@ -244,12 +235,12 @@ postRouter.post("/add-comment", async (req, res) => {
   console.log(sql);
 
   const [result] = await db.query(sql);
-  console.log(result);
+  // console.log(result);
 
   if (result.affectedRows) {
     const success = true;
     res.send(success);
-    console.log(success);
+    // console.log(success);
   }
 });
 
@@ -406,6 +397,5 @@ postRouter.get("/toggle-follow/:user_id", async (req, res) => {
   }
   res.json(output);
 });
-
 
 export default postRouter;

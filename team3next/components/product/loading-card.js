@@ -7,9 +7,9 @@ import { MdOutlineImage } from "react-icons/md";
 export default function LoadingCard({ cards }) {
   return Array(cards)
     .fill(0)
-    .map((items) => {
+    .map((items, i) => {
       return (
-        <SkeletonTheme baseColor={"#F0E4C5"} highlightColor={"#FBF9EF"}>
+        <SkeletonTheme baseColor={"#F0E4C5"} highlightColor={"#FBF9EF"} key={i}>
           <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 col-xxl-3 d-flex justify-content-center align-items-center ">
             <div className={styles.cardP}>
               <div

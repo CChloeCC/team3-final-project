@@ -91,14 +91,21 @@ productRouter.get("/:pid/:uid?", async (req, res) => {
 
   let output = {
     rows: [],
+    rowsType: [],
+    rowsTypeList: [],
     rowsImgs: [],
     rowsWished: false,
     rowsComment: [],
   };
 
-  const sql = `SELECT * FROM product WHERE product_id = ${pid}`;
+  const sql = `SELECT * FROM product JOIN product_type_list ON product_type_list.product_type_list_id = product.product_type_list_id WHERE product_id = ${pid}`;
   const sqlImgs = `SELECT product_img FROM product_img JOIN product ON product_img.product_id = product.product_id WHERE product_img.product_id = ${pid};`;
   const sqlComment = `SELECT * FROM oder_detail JOIN order_general ON oder_detail.order_id = order_general.order_id JOIN user ON order_general.user_id = user.user_id WHERE oder_detail.product_id = ${pid};`;
+
+  const sqlType = `SELECT * FROM product_type`;
+  const sqlTypeList = `SELECT * FROM product_type_list`;
+  const [rowsType] = await db.query(sqlType);
+  const [rowsTypeList] = await db.query(sqlTypeList);
 
   const [[rows]] = await db.query(sql);
   output.rows = rows;
@@ -106,6 +113,9 @@ productRouter.get("/:pid/:uid?", async (req, res) => {
   output.rowsImgs = rowsImgs;
   const [rowsComment] = await db.query(sqlComment);
   output.rowsComment = rowsComment;
+
+  output.rowsType = rowsType;
+  output.rowsTypeList = rowsTypeList;
 
   if (uid) {
     const sqlWished = `SELECT * FROM product JOIN collection ON product.product_id = collection.product_id WHERE product.product_id = ${pid} AND collection.user_id = ${uid}`;

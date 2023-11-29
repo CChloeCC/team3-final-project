@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useLayoutEffect } from "react";
 import { LineShareButton, LineIcon } from "next-share";
 import Head from "next/head";
 import Navbar from "@/components/layout/default-layout/navbar-main";
@@ -19,6 +19,7 @@ import {
   FacebookMessengerIcon,
 } from "next-share";
 import Swal from "sweetalert2";
+import ProductTypeListContext from "@/hooks/ProductTypeListContext";
 
 export default function productDetail() {
   const [data, setData] = useState({
@@ -34,14 +35,21 @@ export default function productDetail() {
     product_img: [],
     showed_1st: "",
   });
+  // console.log(data);
+
   const [wish, setWish] = useState(false);
   const [score, setScore] = useState(0);
 
   const [quantity, setQuantity] = useState(1);
   const [recommend, setRecommend] = useState([]);
 
-  const { run, setRun } = useContext(RunContext);
+  const [clientW, setClientW] = useState("");
 
+  const { run, setRun } = useContext(RunContext);
+  const { returnTypeList, setReturnTypeList } = useContext(
+    ProductTypeListContext
+  );
+  console.log(returnTypeList);
   const router = useRouter();
 
   // 取資料
@@ -60,7 +68,6 @@ export default function productDetail() {
 
           setData(r);
           setWish(r.rowsWished);
-
           setScore(
             scoreList.length
               ? (
@@ -99,6 +106,21 @@ export default function productDetail() {
         });
     }
   }, [data]);
+
+  useEffect(() => {
+    const handleReSize = () => {
+      setClientW(window.innerWidth);
+    };
+
+    if (window) {
+      handleReSize();
+    }
+
+    window.addEventListener("resize", handleReSize);
+    return () => {
+      window.removeEventListener("resize", handleReSize);
+    };
+  }, []);
 
   //增刪收藏
   const handleWish = () => {
@@ -222,167 +244,84 @@ export default function productDetail() {
 
   return (
     <>
-      <Navbar />
       <div className="container  " style={{ paddingTop: "208px" }}>
+        <Navbar />
         <Bread />
-        <div
-          className={styles.topBox + " container d-flex justify-content-around"}
-        >
-          <button class="btn" type="button">
-            全部商品
-          </button>
-          <div class="dropdown">
-            <button
-              class="btn dropdown-toggle "
+        {/* 分類清單------------------------- */}
+        <div className={styles.topBox + " d-flex justify-content-around"}>
+          <div
+            className={
+              styles.topBoxItem + " d-flex align-items-center flex-column"
+            }
+          >
+            <Link
+              href="/product"
+              className={styles.topBoxAll + " btn "}
               type="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
             >
-              飲品/沖泡類
-            </button>
-            <ul class="dropdown-menu">
-              <li>
-                <a class="dropdown-item" href="#">
-                  茶葉/水果茶
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#">
-                  咖啡
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#">
-                  果汁/蔬果汁
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#">
-                  醋/水果醋
-                </a>
-              </li>
-            </ul>
+              全部商品
+            </Link>
           </div>
-          <div class="dropdown">
-            <button
-              class="btn dropdown-toggle"
-              type="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              烘焙食品/甜點
-            </button>
-            <ul class="dropdown-menu">
-              <li>
-                <a class="dropdown-item" href="#">
-                  蛋糕/派
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#">
-                  手工餅乾
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#">
-                  麵包/吐司
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#">
-                  奶酪/布丁/果凍
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div class="dropdown">
-            <button
-              class="btn dropdown-toggle"
-              type="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              休閒零食
-            </button>
-            <ul class="dropdown-menu">
-              <li>
-                <a class="dropdown-item" href="#">
-                  零食
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#">
-                  糖果/巧克力
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#">
-                  果醬/抹醬
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#">
-                  水果乾
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#">
-                  堅果/穀物
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div class="dropdown">
-            <button
-              class="btn dropdown-toggle"
-              type="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              烹料料理
-            </button>
-            <ul class="dropdown-menu">
-              <li>
-                <a class="dropdown-item" href="#">
-                  熟食/冷藏、冷凍食品
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#">
-                  米/麵條
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#">
-                  調理包/料理包
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#">
-                  調味料/醬料
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div class="dropdown">
-            <button
-              class="btn dropdown-toggle"
-              type="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              其他
-            </button>
-            <ul class="dropdown-menu">
-              <li>
-                <a class="dropdown-item" href="#">
-                  其他
-                </a>
-              </li>
-            </ul>
-          </div>
+
+          {data.rowsType &&
+            data.rowsType.map((v, i) => {
+              return (
+                // 大分類
+                <div
+                  key={i}
+                  className={
+                    styles.topBoxItem + " d-flex align-items-center flex-column"
+                  }
+                >
+                  <button
+                    className="btn"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target={`#collapseExample${i}`}
+                    aria-expanded="false"
+                    // aria-controls={`collapseExample${i}`}
+                  >
+                    {v.product_type_name}
+                    <span
+                      style={{ fontSize: "16px" }}
+                      className=" ms-2 icon-arrow-down"
+                    ></span>
+                  </button>
+                  <div className="collapse" id={`collapseExample${i}`}>
+                    <div className={styles.collapseBox + " card"}>
+                      {/* 小分類 */}
+                      {data.rowsTypeList &&
+                        data.rowsTypeList
+                          .filter(
+                            (f, i) => f.product_type_id == v.product_type_id
+                          )
+                          .map((v, i) => {
+                            return (
+                              <button
+                                key={i}
+                                className="btn"
+                                onClick={() => {
+                                  // console.log(
+                                  //   `${v.product_type_list_id},${v.product_type_list_name}`
+                                  // );
+
+                                  setReturnTypeList(
+                                    `${v.product_type_list_id},${v.product_type_list_name}`
+                                  );
+                                  router.push("/product");
+                                }}
+                              >
+                                {v.product_type_list_name}
+                              </button>
+                            );
+                          })}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
         </div>
-        <main className=" w-100 mt-4 ">
+        <main className={styles.main + " w-100 "}>
           <div
             className={
               styles.productMain + " row d-flex justify-content-around mb-5"
@@ -432,10 +371,8 @@ export default function productDetail() {
                       handleWish();
 
                       setWish(!wish);
-                      // console.log(wish);
                     }}
                   ></span>
-                  {/* </Link> */}
                 </p>
                 <p className="">
                   <span>NT$ </span>
@@ -547,11 +484,11 @@ export default function productDetail() {
           <div className={styles.infoBox + " w-100"}>
             <div className={styles.infoItem}>
               <p className={styles.head + " h4"}>商品介紹</p>
-              <p className={styles.text}>{data.rows && descSplit}</p>
+              <div className={styles.text}>{data.rows && descSplit}</div>
             </div>
             <div className={styles.infoItem}>
               <p className={styles.head + " h4"}>商品規格</p>
-              <p className={styles.text}>{data.rows && specSplit}</p>
+              <div className={styles.text}>{data.rows && specSplit}</div>
             </div>
             <div className={styles.infoItem}>
               <p className={styles.head + " h4"}>商品評論</p>
@@ -577,14 +514,14 @@ export default function productDetail() {
           </div>
           <div className={styles.recommendBox + " row pb-5"}>
             <p className={styles.head + " h4"}>推薦商品</p>
-            <div className={styles.test + " w-100"}>
+            <div className=" w-100">
               {/* ------------推薦商品----------- */}
               <Swiper
                 spaceBetween={40}
-                slidesPerView={5}
+                slidesPerView={clientW > 992 ? 6 : clientW > 768 ? 4 : 3}
                 navigation={true}
                 modules={[Navigation]}
-                className={" mySwiper p-4"}
+                className={" row mySwiper p-4 "}
                 style={{
                   "--swiper-navigation-color": "#3f4c5c",
                   "--swiper-navigation-size": "22px",
@@ -599,9 +536,9 @@ export default function productDetail() {
                           {
                             <div
                               className="
-                  justify-content-center align-items-center "
+                  justify-content-center align-items-center"
                             >
-                              <div>
+                              <div className="rounded-circle overflow-hidden">
                                 <Link href={`/product/${v.product_id}`}>
                                   <img
                                     src={"/images/product/" + v.product_img}

@@ -48,7 +48,7 @@ export default function PostModal({
 
   const messageChanged = (e) => {
     const { id, value } = e.target;
-    console.log({ id, value });
+    // console.log({ id, value });
     const newVal = { ...messageVal, [id]: value };
     setMessageVal(newVal);
   };
@@ -142,7 +142,7 @@ export default function PostModal({
       .then((r) => r.json())
       .then((r) => {
         setRestInfo(r);
-        console.log(r);
+        // console.log(r);
       })
       .catch((ex) => {
         console.log(ex);

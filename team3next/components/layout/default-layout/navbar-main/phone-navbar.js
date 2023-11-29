@@ -8,19 +8,20 @@ export default function PhoneNavbar() {
   const [userinfo, setUserInfo] = useState([]);
 
   useEffect(() => {
-    fetch(process.env.API_SERVER + `/api/user/${auth.user_id}/user`)
-      .then((r) => r.json())
-      .then((r) => {
-        setUserInfo(r);
-        // console.log(r);
-      })
-      .catch((ex) => {
-        console.log(ex);
-      });
+    if (auth.user_id) {
+      fetch(process.env.API_SERVER + `/api/user/${auth.user_id}/user`)
+        .then((r) => r.json())
+        .then((r) => {
+          setUserInfo(r);
+        })
+        .catch((ex) => {
+          console.log(ex);
+        });
+    }
   }, [auth.user_id]);
   return (
     <>
-      <div className="container card card-body my-1" style={{ width: 375 }}>
+      <div className="container card card-body my-1">
         <div className="user-info-area mt-4">
           <div>
             {userinfo && userinfo.length > 0 && userinfo[0].user_img ? (
@@ -46,7 +47,7 @@ export default function PhoneNavbar() {
         </div>
         <div className="link-area">
           <span className="fs18b">
-            <Link href="#" className="text-dark">
+            <Link href="/post" className="text-dark">
               食好料
             </Link>
           </span>
@@ -56,7 +57,7 @@ export default function PhoneNavbar() {
         </div>
         <div className="link-area">
           <span className="fs18b">
-            <Link href="#" className="text-dark">
+            <Link href="/book" className="text-dark">
               食在推
             </Link>
           </span>
@@ -67,7 +68,7 @@ export default function PhoneNavbar() {
         <div className="link-area">
           <span className="fs18b">
             {" "}
-            <Link href="#" className="text-dark">
+            <Link href="/product" className="text-dark">
               嗑零食
             </Link>
           </span>
@@ -77,7 +78,10 @@ export default function PhoneNavbar() {
         </div>
         <div className="link-area">
           <span className="fs18b">
-            <Link href="#" className="text-dark">
+            <Link
+              href={auth.user_id ? `/user/${auth.user_id}` : "/user/login"}
+              className="text-dark"
+            >
               會員中心
             </Link>
           </span>
@@ -87,7 +91,7 @@ export default function PhoneNavbar() {
         </div>
         <div className="link-area">
           <span className="fs18b">
-            <Link href="#" className="text-dark">
+            <Link href="/cart" className="text-dark">
               購物車
             </Link>
           </span>

@@ -1,4 +1,5 @@
-import { useContext, useEffect, useRef, useState, useRouter } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/router";
 import Navbar from "@/components/layout/default-layout/navbar-main";
 import styles from "./index.module.css";
 import Bread from "@/components/product/bread";
@@ -9,18 +10,18 @@ import AuthContext from "@/hooks/AuthContext";
 import RunContext from "@/hooks/RunContext";
 
 import Pagination from "@/components/product/pagination";
-import TestInput from "./test";
+
 import LoadingCard from "@/components/product/loading-card";
 import ws from "ws";
 import WsContext from "@/hooks/WsContext";
 import Swal from "sweetalert2";
 import Head from "next/head";
-import {} from "next/router";
+import ProductTypeListContext from "@/hooks/ProductTypeListContext";
 
 export default function index() {
   //資料用
   const [data, setData] = useState([]);
-  console.log(data);
+
   const [wish, setWish] = useState([]);
   const [order, setOrder] = useState("new");
   const wsRef = useRef();
@@ -32,6 +33,8 @@ export default function index() {
 
   const [type, setType] = useState("");
   const [typeList, setTypeList] = useState("");
+  // console.log(typeList);
+
   //篩選用
   const [price, setPrice] = useState("");
   const priceList = [
@@ -39,7 +42,10 @@ export default function index() {
     ["300以下", "300 - 500", "500 - 800", "800 - 1000", "1000以上"],
   ];
   const [items, setItems] = useState([]);
-  // console.log(items);
+  const { returnTypeList, setReturnTypeList } = useContext(
+    ProductTypeListContext
+  );
+  console.log(returnTypeList);
 
   //重渲染頁面用
   const { run, setRun } = useContext(RunContext);
@@ -59,8 +65,10 @@ export default function index() {
   const currentItems = data.rows?.slice(firstItemIndex, lastItemIndex);
 
   // 取資料
+
   useEffect(() => {
     if (isCompositing) return;
+
     fetch("http://localhost:3002/api/product", {
       method: "POST",
       body: JSON.stringify({
@@ -70,7 +78,7 @@ export default function index() {
         order: order,
         search: inputText,
         type: type,
-        typeList: typeList.split(",")[1],
+        typeList: typeList.split(",")[1] || returnTypeList.split(",")[1],
         price: price,
         items: items,
       }),
@@ -85,10 +93,10 @@ export default function index() {
 
       .then((data) => {
         setData(data);
+
         //取願望資料
         if (data.rowsWish.length > 0) {
           let wishList = data.rowsWish.map((v) => v.product_id);
-          // console.log(wishList);
           setWish(wishList);
         }
       });
@@ -139,19 +147,16 @@ export default function index() {
         })
           .then((r) => r.json())
           .then((r) => {
-            console.log(r); //true
+            console.log(r);
             if (r) {
               // location.reload();
 
               Swal.fire({
                 toast: true,
-                // className: "yyy",
-                // backdrop: "false",
                 showConfirmButton: false,
                 timer: 1500,
                 position: "top",
                 width: "250px",
-                // height: "20px",
                 text: "已更新願望清單",
                 icon: "success",
               });
@@ -180,10 +185,8 @@ export default function index() {
     ws.onmessage = (res) => {
       console.log(JSON.parse(res.data));
       const msgBack = JSON.parse(res.data);
-      // console.log(msgBack, res.type);
 
       if (res.type === "message") {
-        // console.log("res.data === message");
         const newMsgs = [...wsMsgs, msgBack];
         console.log(newMsgs);
 
@@ -210,10 +213,11 @@ export default function index() {
       console.log("ws.readyState不等於 1");
     }
   }
-
   //------------------------------------------------
+
   return (
     <>
+      {/* ws-------------------------------- */}
       <button
         className={"btn " + styles.typing}
         type="button"
@@ -223,7 +227,7 @@ export default function index() {
         style={{
           position: "fixed",
           right: "0px",
-          bottom: "150px",
+          bottom: "200px",
           zIndex: "11",
         }}
       >
@@ -315,19 +319,22 @@ export default function index() {
         </div>
       </div>
       {/* ---------------------------------- */}
-      <Navbar />
+
       <div className="container" style={{ paddingTop: "203px" }}>
+        <Navbar />
         <Bread typeList={typeList} data={data} />
 
         <div className="w-100 d-flex mb-3">
-          <main className="w-100 d-flex">
+          <main className="w-100 d-flex position-relative">
             <div className={styles.leftBox}>
+              <span className="icon-list"></span>
               {/* -----------分類選單---------- */}
               <div className={styles.left}>
                 <button
                   onClick={() => {
                     setInputText("");
                     setTypeList("");
+                    setReturnTypeList("");
                     setPrice([]);
                     setItems([]);
                   }}
@@ -367,7 +374,6 @@ export default function index() {
                                   className={styles.typeListBtn + " btn"}
                                   type="button"
                                   onClick={() => {
-                                    // console.log(list.product_type_list_name);
                                     setTypeList(
                                       `${list.product_type_list_id},${list.product_type_list_name}`
                                     );
@@ -437,7 +443,6 @@ export default function index() {
                                 onChange={() => {
                                   if (!items.includes(v.item_id)) {
                                     const newItems = [...items, v.item_id];
-                                    // console.log(newItems);
 
                                     setItems(newItems);
                                   } else {
@@ -453,8 +458,8 @@ export default function index() {
                           );
                         })
                     : data.items &&
+                      //預設篩選條件
                       data.items.map((v, i) => {
-                        //預設篩選條件
                         return (
                           <label key={i}>
                             <input
@@ -669,9 +674,11 @@ export default function index() {
       </div>
 
       <Footer />
+
       <Head>
         <title>食食嗑嗑-嗑零食</title>
       </Head>
+
       <style jsx>
         {`
           .scrollbar {
@@ -694,7 +701,6 @@ export default function index() {
           .myMsgBox {
             display: flex;
             justify-content: end;
-            // text-align: end;
           }
 
           .otherMsgBox {
@@ -713,10 +719,6 @@ export default function index() {
             border-radius: 40px;
             padding: 5px 10px;
           }
-          // .offcanvas {
-          //   position: fixed;
-          //   right: 100px;
-          // }
         `}
       </style>
     </>
