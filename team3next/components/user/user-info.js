@@ -119,10 +119,12 @@ export default function UserInfo() {
     <>
       <main
         className="container bottom-line"
-        style={{ paddingBottom: 40, marginTop: 250 }}>
+        style={{ paddingBottom: 40, marginTop: 250 }}
+      >
         <div
           className="d-flex justify-content-around align-items-center mt-3 mb-1"
-          style={{ paddingInline: 200 }}>
+          style={{ paddingInline: 200 }}
+        >
           <div className="middle flex-column ms-5 ps-5">
             <h2 className="fw-bold">{auth.nickname}</h2>
             <div className="mt-2 fw-semibold">
@@ -141,10 +143,11 @@ export default function UserInfo() {
               }`;
               handleSubmission(newFilename);
             }}
-            encType="multipart/form-data">
+            encType="multipart/form-data"
+          >
             <input name="user_id" type="hidden" value={auth.user_id} />
             <div className="middle ms-5">
-              <div className="position-relative">
+              <div className="position-relative" style={{ width: "180px" }}>
                 {userinfo && userinfo.length > 0 && userinfo[0].user_img ? (
                   <img
                     src={
